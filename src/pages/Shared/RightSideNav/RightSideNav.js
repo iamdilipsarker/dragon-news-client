@@ -1,7 +1,8 @@
-import React from "react";
+import React, { useContext } from "react";
 import { ListGroup } from "react-bootstrap";
 import Button from "react-bootstrap/Button";
 import ButtonGroup from "react-bootstrap/ButtonGroup";
+import { GoogleAuthProvider } from "firebase/auth";
 import BrandCarousel from "../BrandCarousel/BrandCarousel";
 import {
   FaGoogle,
@@ -11,12 +12,26 @@ import {
   FaWhatsapp,
   FaTwitch,
 } from "react-icons/fa";
+import { AuthContext } from "../../../contexts/AuthProvider/AuthProvider";
 
 const RightSideNav = () => {
+  const { providerLogin } = useContext(AuthContext);
+
+  const googleProvider = new GoogleAuthProvider();
+
+  const handleGoogleSignIn = () => {
+    providerLogin(googleProvider)
+      .then((result) => {
+        const user = result.user;
+        console.log(user);
+      })
+      .catch((error) => console.error(error));
+  };
+
   return (
     <div>
       <ButtonGroup vertical>
-        <Button variant="outline-primary">
+        <Button onClick={handleGoogleSignIn} variant="outline-primary">
           <FaGoogle></FaGoogle> Login with Google
         </Button>
         <Button variant="outline-dark">
